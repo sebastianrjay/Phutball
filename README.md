@@ -1,4 +1,4 @@
-Setup
+# Setup
 
 1. Globally [install](https://github.com/yarnpkg/yarn#installing-yarn) [yarn](https://github.com/yarnpkg/yarn), a deterministic replacement for NPM
 2. Globally [install](https://webpack.js.org/guides/installation/) [Webpack](https://github.com/webpack/webpack)
