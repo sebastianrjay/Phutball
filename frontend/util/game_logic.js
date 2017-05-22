@@ -16,7 +16,13 @@ const makeJumpIfValid = (newGameState, action) => {
     return tryColumnJump(newGameState, checkIndices)
   } else if (ballColIdx === colIdx) {
     return tryRowJump(newGameState, checkIndices)
-  } else return tryDiagonalJump(newGameState, checkIndices)
+  } else {
+    const colJumpMagnitude = Math.abs(colIdx - ballColIdx)
+    const rowJumpMagnitude = Math.abs(rowIdx - ballRowIdx)
+    if (colJumpMagnitude === rowJumpMagnitude) {
+      return tryDiagonalJump(newGameState, checkIndices)
+    } else return false
+  }
 }
 
 const moveFootball = (newGameState, action) => {
@@ -36,11 +42,9 @@ const moveFootball = (newGameState, action) => {
 const placeNewMan = (newGameState, action) => {
   const { colIdx, rowIdx } = action
   const newPlayer = newGameState.player === PLAYER_ONE ? PLAYER_TWO : PLAYER_ONE
-  const newTileState = assign({}, previousTileState, { piece: MAN })
-  const previousTileState = newGameState.tiles[rowIdx][colIdx]
 
   newGameState.player = newPlayer
-  newGameState.tiles[rowIdx][colIdx] = newTileState
+  newGameState.tiles[rowIdx][colIdx].piece = MAN
 
   return newGameState
 }
@@ -48,15 +52,11 @@ const placeNewMan = (newGameState, action) => {
 const toggleBallSelection = (newGameState, action) => {
   const { colIdx, rowIdx } = action
   newGameState.isBallSelected = !newGameState.isBallSelected
-  const previousTileState = newGameState.tiles[rowIdx][colIdx]
-  const newTileState = assign({}, previousTileState)
-  if (previousTileState.player) {
-    newTileState.player = null
+  if (newGameState.tiles[rowIdx][colIdx].player) {
+    newGameState.tiles[rowIdx][colIdx].player = null
   } else {
-    newTileState.player = newGameState.player
+    newGameState.tiles[rowIdx][colIdx].player = newGameState.player
   }
-
-  newGameState.tiles[rowIdx][colIdx] = newTileState
 
   return newGameState
 }
