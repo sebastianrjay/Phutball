@@ -9,6 +9,7 @@ import {
 } from '../actions/game_actions'
 import {
   allValidMoves,
+  setTilesDisabled,
   showNextMovesIfExistent,
   tryJump,
 } from './moves'
@@ -29,8 +30,10 @@ const moveFootballAndShowNextMoves = (newGameState, action) => {
 
   if (nextMoves.length === 0) {
     newGameState.isBallSelected = false
+    newGameState.justMovedBall = false
   } else {
     newGameState.tiles[rowIdx][colIdx].player = currentPlayer
+    newGameState.justMovedBall = true
   }
 
   return newGameState
@@ -56,12 +59,14 @@ const scoreGoalIfOnGoalLine = (newGameState) => {
 
 const toggleBallSelection = (newGameState, action) => {
   const { colIdx, rowIdx } = action
-  newGameState.isBallSelected = !newGameState.isBallSelected
-  if (newGameState.tiles[rowIdx][colIdx].player) {
+  if (newGameState.isBallSelected) {
+    if (!newGameState.justMovedBall) setTilesDisabled(newGameState, false)
     newGameState.tiles[rowIdx][colIdx].player = null
   } else {
     newGameState.tiles[rowIdx][colIdx].player = newGameState.player
   }
+
+  newGameState.isBallSelected = !newGameState.isBallSelected
 }
 
 const toggleBallSelectionAndShowNextMoves = (newGameState, action) => {

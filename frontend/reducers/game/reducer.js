@@ -39,6 +39,7 @@ const initialState = {
   ballColIdx,
   ballRowIdx,
   isBallSelected: false,
+  justMovedBall: false,
   player: PLAYER_ONE,
   points: {
     [PLAYER_ONE]: 0,

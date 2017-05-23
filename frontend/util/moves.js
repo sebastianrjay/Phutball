@@ -16,18 +16,30 @@ export const allValidMoves = (newGameState) => {
   return allMoves
 }
 
+export const setTilesDisabled = (newGameState, disabled) => {
+  newGameState.tiles.forEach((row, rowIdx) => {
+    row.forEach((tile, colIdx) => {
+      if (!(newGameState.ballRowIdx === rowIdx &&
+          newGameState.ballColIdx === colIdx)) {
+        newGameState.tiles[rowIdx][colIdx].disabled = disabled
+      }
+    })
+  })
+}
+
 export const showNextMovesIfExistent = (newGameState, nextMoves) => {
   if (nextMoves.length > 0) {
-    _setTilesDisabled(newGameState, true)
+    setTilesDisabled(newGameState, true)
     nextMoves.forEach(({ colIdx, rowIdx }) => {
       newGameState.tiles[rowIdx][colIdx].disabled = false
     })
   } else {
-    _setTilesDisabled(newGameState, false)
+    setTilesDisabled(newGameState, false)
   }
 }
 
 export const tryJump = (newGameState, { colIdx, rowIdx }, movePiece = true) => {
+  // Return true if possible; false otherwise. Move piece if movePiece is true
   const { ballColIdx, ballRowIdx } = newGameState
   const colJumpMagnitude = Math.abs(colIdx - ballColIdx)
   const rowJumpMagnitude = Math.abs(rowIdx - ballRowIdx)
@@ -47,14 +59,6 @@ export const tryJump = (newGameState, { colIdx, rowIdx }, movePiece = true) => {
       return _tryDiagonalJump(newGameState, indices, movePiece)
     } else return false
   }
-}
-
-const _setTilesDisabled = (newGameState, disabled) => {
-  newGameState.tiles.forEach((row, rowIdx) => {
-    row.forEach((tile, colIdx) => {
-      newGameState.tiles[rowIdx][colIdx].disabled = disabled
-    })
-  })
 }
 
 const _tryColumnJump = (newGameState, indices, movePiece = true) => {

@@ -25,17 +25,11 @@ export const PLAYER_TWO = 'PLAYER_TWO'
 
 // Board
 
-export const clickTile = ({ colIdx, disabled, piece, player, rowIdx }) => {
-  if (disabled) {
-    return {}
-  } else {
-    return {
-      type: CLICK_TILE,
-      colIdx,
-      disabled,
-      piece,
-      player,
-      rowIdx,
-    }
-  }
-}
+export const clickTile = ({ colIdx, disabled, piece, player, rowIdx }) => ({
+  type: CLICK_TILE,
+  colIdx,
+  disabled,
+  piece,
+  player,
+  rowIdx,
+})

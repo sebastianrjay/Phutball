@@ -22,7 +22,9 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  handleClick: (props) => (e) => dispatch(clickTile(props))
+  handleClick: (props) => (e) => {
+    if (!props.disabled) return dispatch(clickTile(props))
+  }
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Tile)
