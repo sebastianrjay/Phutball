@@ -10,6 +10,8 @@ export const FOOTBALL_START_COL = 8
 export const FOOTBALL_START_ROW = 10
 export const HEIGHT = 19
 export const WIDTH = 15
+export const PLAYER_ONE_GOAL_ROW = 0
+export const PLAYER_TWO_GOAL_ROW = HEIGHT - 1
 
 // Pieces
 export const FOOTBALL = 'FOOTBALL'

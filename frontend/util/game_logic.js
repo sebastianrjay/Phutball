@@ -1,5 +1,12 @@
 import assign from 'lodash/assign'
-import { FOOTBALL, MAN, PLAYER_ONE, PLAYER_TWO } from '../actions/game_actions'
+import {
+  FOOTBALL,
+  MAN,
+  PLAYER_ONE,
+  PLAYER_ONE_GOAL_ROW,
+  PLAYER_TWO,
+  PLAYER_TWO_GOAL_ROW,
+} from '../actions/game_actions'
 import {
   allValidMoves,
   showNextMovesIfExistent,
@@ -39,6 +46,14 @@ const placeNewMan = (newGameState, action) => {
   return newGameState
 }
 
+const scoreGoalIfOnGoalLine = (newGameState) => {
+  if (newGameState.ballRowIdx === PLAYER_ONE_GOAL_ROW) {
+    newGameState.points[PLAYER_ONE] += 1
+  } else if (newGameState.ballRowIdx === PLAYER_TWO_GOAL_ROW) {
+    newGameState.points[PLAYER_TWO] += 1
+  }
+}
+
 const toggleBallSelection = (newGameState, action) => {
   const { colIdx, rowIdx } = action
   newGameState.isBallSelected = !newGameState.isBallSelected
@@ -71,7 +86,9 @@ export const handleTileClick = (state, action) => {
         return placeNewMan(newGameState, action)
       } else {
         if (tryJump(newGameState, action)) {
-          return moveFootballAndShowNextMoves(newGameState, action)
+          moveFootballAndShowNextMoves(newGameState, action)
+          scoreGoalIfOnGoalLine(newGameState)
+          return newGameState
         } else return state
       }
     default:

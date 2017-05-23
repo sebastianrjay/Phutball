@@ -6,6 +6,7 @@ import {
   FOOTBALL_START_ROW,
   HEIGHT,
   PLAYER_ONE,
+  PLAYER_TWO,
   WIDTH,
 } from '../../actions/game_actions'
 import { handleTileClick } from '../../util/game_logic'
@@ -17,8 +18,6 @@ const defaultTileState = {
   piece: null,
   player: null,
 }
-const selectedColIdx = null
-const selectedRowIdx = null
 const tiles = []
 
 for (let rowIdx = 0; rowIdx < HEIGHT; rowIdx++) {
@@ -41,6 +40,10 @@ const initialState = {
   ballRowIdx,
   isBallSelected: false,
   player: PLAYER_ONE,
+  points: {
+    [PLAYER_ONE]: 0,
+    [PLAYER_TWO]: 0,
+  },
   tiles,
 }
 
