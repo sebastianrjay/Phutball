@@ -1,4 +1,6 @@
-import { map, range, remove } from 'lodash'
+import map from 'lodash/map'
+import range from 'lodash/range'
+import remove from 'lodash/remove'
 import React from 'react'
 import { connect } from 'react-redux'
 import TileRow from '../partials/tile_row'
