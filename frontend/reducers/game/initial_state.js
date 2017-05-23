@@ -16,6 +16,7 @@ const defaultTileState = {
   disabled: false,
   piece: NO_PIECE,
   player: PLAYER_ONE,
+  selected: false,
 }
 const tiles = []
 

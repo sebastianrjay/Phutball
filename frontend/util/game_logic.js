@@ -10,6 +10,8 @@ import {
 } from '../actions/game_actions'
 import {
   allValidMoves,
+  moveFootball,
+  setBallPlayer,
   setNextPlayer,
   setTilesDisabled,
   showNextMovesIfExistent,
@@ -18,27 +20,10 @@ import {
 import { tryJump } from './moves'
 
 const moveFootballAndShowNextMoves = (gameState, action) => {
-  const { colIdx, rowIdx } = action
-  const { ballColIdx, ballRowIdx } = gameState
-  const currentPlayer = gameState.tiles[ballRowIdx][ballColIdx].player
-
-  gameState.tiles[ballRowIdx][ballColIdx].piece = NO_PIECE
-  gameState.tiles[ballRowIdx][ballColIdx].player = null
-  gameState.tiles[rowIdx][colIdx].piece = FOOTBALL
-  gameState.ballColIdx = colIdx
-  gameState.ballRowIdx = rowIdx
-
+  moveFootball(gameState, action)
   const nextMoves = allValidMoves(gameState)
   showNextMovesIfExistent(gameState, nextMoves)
-
-  if (nextMoves.length === 0) {
-    gameState.isBallSelected = false
-    gameState.justMovedBall = false
-    setNextPlayer(gameState, currentPlayer)
-  } else {
-    gameState.tiles[rowIdx][colIdx].player = currentPlayer
-    gameState.justMovedBall = true
-  }
+  setBallPlayer(gameState, action, nextMoves)
 
   return gameState
 }

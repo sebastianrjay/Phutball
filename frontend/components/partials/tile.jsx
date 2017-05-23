@@ -8,9 +8,21 @@ const charCode = {
   MAN: 9679,
 }
 
-const Tile = ({ colIdx, disabled, handleClick, piece, player, rowIdx }) => (
+const Tile = ({
+  colIdx,
+  disabled,
+  handleClick,
+  piece,
+  player,
+  rowIdx,
+  selected,
+}) => (
   <td
-    className={`${disabled ? 'disabled ' : ''}${kebabCase(player)}`}
+    className={
+      `${disabled ? 'disabled ' : ''}` +
+      `${selected ? 'selected ' : ''}` +
+      `${kebabCase(player)}`
+    }
     onClick={handleClick({ colIdx, disabled, piece, player, rowIdx })}
   >
     {

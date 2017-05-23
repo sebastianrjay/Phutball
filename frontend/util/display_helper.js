@@ -1,4 +1,9 @@
-import { PLAYER_ONE, PLAYER_TWO } from '../actions/game_actions'
+import {
+  FOOTBALL,
+  NO_PIECE,
+  PLAYER_ONE,
+  PLAYER_TWO,
+} from '../actions/game_actions'
 import { tryJump } from './moves'
 
 export const allValidMoves = (gameState) => {
@@ -13,6 +18,34 @@ export const allValidMoves = (gameState) => {
   })
 
   return allMoves
+}
+
+export const moveFootball = (gameState, action) => {
+  const { colIdx, rowIdx } = action
+  const { ballColIdx, ballRowIdx } = gameState
+
+  gameState.tiles[ballRowIdx][ballColIdx].piece = NO_PIECE
+  gameState.tiles[ballRowIdx][ballColIdx].player = null
+  gameState.tiles[ballRowIdx][ballColIdx].selected = false
+  gameState.tiles[rowIdx][colIdx].piece = FOOTBALL
+  gameState.ballColIdx = colIdx
+  gameState.ballRowIdx = rowIdx
+}
+
+export const setBallPlayer = (gameState, action, nextMoves) => {
+  const { colIdx, rowIdx } = action
+  const { ballColIdx, ballRowIdx } = gameState
+  const currentPlayer = gameState.tiles[ballRowIdx][ballColIdx].player
+
+  if (nextMoves.length === 0) {
+    gameState.isBallSelected = false
+    gameState.justMovedBall = false
+    setNextPlayer(gameState, currentPlayer)
+  } else {
+    gameState.tiles[rowIdx][colIdx].player = currentPlayer
+    gameState.tiles[rowIdx][colIdx].selected = true
+    gameState.justMovedBall = true
+  }
 }
 
 export const setNextPlayer = (gameState, currentPlayer = gameState.player) => {
