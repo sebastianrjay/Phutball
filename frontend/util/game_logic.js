@@ -1,7 +1,8 @@
-import assign from 'lodash/assign'
+import defaultsDeep from 'lodash/defaultsDeep'
 import {
   FOOTBALL,
   MAN,
+  NO_PIECE,
   PLAYER_ONE,
   PLAYER_ONE_GOAL_ROW,
   PLAYER_TWO,
@@ -14,86 +15,91 @@ import {
   tryJump,
 } from './moves'
 
-const moveFootballAndShowNextMoves = (newGameState, action) => {
+const moveFootballAndShowNextMoves = (gameState, action) => {
   const { colIdx, rowIdx } = action
-  const { ballColIdx, ballRowIdx } = newGameState
-  const currentPlayer = newGameState.tiles[ballRowIdx][ballColIdx].player
+  const { ballColIdx, ballRowIdx } = gameState
+  const currentPlayer = gameState.tiles[ballRowIdx][ballColIdx].player
 
-  newGameState.tiles[ballRowIdx][ballColIdx].piece = null
-  newGameState.tiles[ballRowIdx][ballColIdx].player = null
-  newGameState.tiles[rowIdx][colIdx].piece = FOOTBALL
-  newGameState.ballColIdx = colIdx
-  newGameState.ballRowIdx = rowIdx
+  gameState.tiles[ballRowIdx][ballColIdx].piece = NO_PIECE
+  gameState.tiles[ballRowIdx][ballColIdx].player = null
+  gameState.tiles[rowIdx][colIdx].piece = FOOTBALL
+  gameState.ballColIdx = colIdx
+  gameState.ballRowIdx = rowIdx
 
-  const nextMoves = allValidMoves(newGameState)
-  showNextMovesIfExistent(newGameState, nextMoves)
+  const nextMoves = allValidMoves(gameState)
+  showNextMovesIfExistent(gameState, nextMoves)
 
   if (nextMoves.length === 0) {
-    newGameState.isBallSelected = false
-    newGameState.justMovedBall = false
+    gameState.isBallSelected = false
+    gameState.justMovedBall = false
   } else {
-    newGameState.tiles[rowIdx][colIdx].player = currentPlayer
-    newGameState.justMovedBall = true
+    gameState.tiles[rowIdx][colIdx].player = currentPlayer
+    gameState.justMovedBall = true
   }
 
-  return newGameState
+  return gameState
 }
 
-const placeNewMan = (newGameState, action) => {
+const placeNewMan = (gameState, action) => {
   const { colIdx, rowIdx } = action
-  const newPlayer = newGameState.player === PLAYER_ONE ? PLAYER_TWO : PLAYER_ONE
+  const newPlayer = gameState.player === PLAYER_ONE ? PLAYER_TWO : PLAYER_ONE
 
-  newGameState.player = newPlayer
-  newGameState.tiles[rowIdx][colIdx].piece = MAN
+  gameState.player = newPlayer
+  gameState.tiles[rowIdx][colIdx].piece = MAN
 
-  return newGameState
+  return gameState
 }
 
-const scoreGoalIfOnGoalLine = (newGameState) => {
-  if (newGameState.ballRowIdx === PLAYER_ONE_GOAL_ROW) {
-    newGameState.points[PLAYER_ONE] += 1
-  } else if (newGameState.ballRowIdx === PLAYER_TWO_GOAL_ROW) {
-    newGameState.points[PLAYER_TWO] += 1
+const removeMan = (gameState, action) => {
+  const { colIdx, rowIdx } = action
+  gameState.tiles[rowIdx][colIdx].piece = NO_PIECE
+  return gameState
+}
+
+const scoreGoalIfOnGoalLine = (gameState) => {
+  if (gameState.ballRowIdx === PLAYER_ONE_GOAL_ROW) {
+    gameState.points[PLAYER_ONE] += 1
+  } else if (gameState.ballRowIdx === PLAYER_TWO_GOAL_ROW) {
+    gameState.points[PLAYER_TWO] += 1
   }
 }
 
-const toggleBallSelection = (newGameState, action) => {
+const toggleBallSelection = (gameState, action) => {
   const { colIdx, rowIdx } = action
-  if (newGameState.isBallSelected) {
-    if (!newGameState.justMovedBall) setTilesDisabled(newGameState, false)
-    newGameState.tiles[rowIdx][colIdx].player = null
+  if (gameState.isBallSelected) {
+    if (!gameState.justMovedBall) setTilesDisabled(gameState, false)
+    gameState.tiles[rowIdx][colIdx].player = null
   } else {
-    newGameState.tiles[rowIdx][colIdx].player = newGameState.player
+    gameState.tiles[rowIdx][colIdx].player = gameState.player
   }
 
-  newGameState.isBallSelected = !newGameState.isBallSelected
+  gameState.isBallSelected = !gameState.isBallSelected
 }
 
-const toggleBallSelectionAndShowNextMoves = (newGameState, action) => {
-  const nextMoves = allValidMoves(newGameState)
-  showNextMovesIfExistent(newGameState, nextMoves)
-  toggleBallSelection(newGameState, action)
+const toggleBallSelectionAndShowNextMoves = (gameState, action) => {
+  const nextMoves = allValidMoves(gameState)
+  showNextMovesIfExistent(gameState, nextMoves)
+  toggleBallSelection(gameState, action)
 
-  return newGameState
+  return gameState
 }
 
 export const handleTileClick = (state, action) => {
-  const newGameState = assign({}, state)
+  const gameState = defaultsDeep({}, state)
 
   switch (action.piece) {
     case FOOTBALL:
-      return toggleBallSelectionAndShowNextMoves(newGameState, action)
+      return toggleBallSelectionAndShowNextMoves(gameState, action)
     case MAN:
-      // Man deletion not yet built
-      return state
-    case null:
+      return removeMan(gameState, action)
+    case NO_PIECE:
       if (!state.isBallSelected) {
-        return placeNewMan(newGameState, action)
+        return placeNewMan(gameState, action)
       } else {
-        if (tryJump(newGameState, action)) {
-          moveFootballAndShowNextMoves(newGameState, action)
-          scoreGoalIfOnGoalLine(newGameState)
-          return newGameState
+        if (tryJump(gameState, action)) {
+          moveFootballAndShowNextMoves(gameState, action)
+          scoreGoalIfOnGoalLine(gameState)
+          return gameState
         } else return state
       }
     default:

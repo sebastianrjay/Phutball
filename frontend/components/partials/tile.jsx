@@ -1,7 +1,7 @@
+import kebabCase from 'lodash/kebabCase'
 import React from 'react'
 import { connect } from 'react-redux'
-import { clickTile } from '../../actions/game_actions'
-import kebabCase from 'lodash/kebabCase'
+import { clickTile, NO_PIECE } from '../../actions/game_actions'
 
 const charCode = {
   FOOTBALL: 9675,
@@ -13,7 +13,9 @@ const Tile = ({ colIdx, disabled, handleClick, piece, player, rowIdx }) => (
     className={`${disabled ? 'disabled ' : ''}${kebabCase(player)}`}
     onClick={handleClick({ colIdx, disabled, piece, player, rowIdx })}
   >
-    { piece ? String.fromCharCode(charCode[piece]) : "\u00a0\u00a0" }
+    {
+      piece === NO_PIECE ? "\u00a0\u00a0" : String.fromCharCode(charCode[piece])
+    }
   </td>
 )
 

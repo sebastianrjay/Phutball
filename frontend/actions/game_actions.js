@@ -16,6 +16,7 @@ export const PLAYER_TWO_GOAL_ROW = HEIGHT - 1
 // Pieces
 export const FOOTBALL = 'FOOTBALL'
 export const MAN = 'MAN'
+export const NO_PIECE = 'NO_PIECE'
 
 // Players
 export const PLAYER_ONE = 'PLAYER_ONE'

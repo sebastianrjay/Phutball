@@ -1,3 +1,4 @@
+import pick from 'lodash/pick'
 import React from 'react'
 import { connect } from 'react-redux'
 import { HEIGHT } from '../../actions/game_actions'

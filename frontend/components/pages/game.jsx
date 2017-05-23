@@ -9,7 +9,7 @@ import TileRow from '../partials/tile_row'
 const CHAR_CODES = range('A'.charCodeAt(0), 'Z'.charCodeAt(0) + 1)
 const ALPHABET = map(CHAR_CODES, charCode => String.fromCharCode(charCode))
 
-const Game = ({ isBallSelected, player, points, tiles }) => (
+const Game = ({ player, points, tiles }) => (
   <section id="game" className="row">
     <div className="col-md-12">
       <div className="row">
@@ -27,17 +27,25 @@ const Game = ({ isBallSelected, player, points, tiles }) => (
         <div className="col-md-12">
           <div className="table-responsive">
             <table className="table table-bordered" cellPadding="0" cellSpacing="0">
-              <tr>
-                <th></th>
-                { tiles[0].map((tile, tileIdx) => <th>{ALPHABET[tileIdx]}</th>) }
-              </tr>
-              {
-                tiles.map(
-                  (row, rowIdx) => (
-                    <TileRow key={rowIdx} row={row} rowIdx={rowIdx} />
+              <thead>
+                <tr>
+                  <th></th>
+                  {
+                    tiles[0].map((tile, tileIdx) => {
+                      return (<th key={tileIdx}>{ALPHABET[tileIdx]}</th>)
+                    })
+                  }
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  tiles.map(
+                    (row, rowIdx) => (
+                      <TileRow key={rowIdx} row={row} rowIdx={rowIdx} />
+                    )
                   )
-                )
-              }
+                }
+              </tbody>
             </table>
           </div>
         </div>

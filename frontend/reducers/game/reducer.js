@@ -5,6 +5,7 @@ import {
   FOOTBALL_START_COL,
   FOOTBALL_START_ROW,
   HEIGHT,
+  NO_PIECE,
   PLAYER_ONE,
   PLAYER_TWO,
   WIDTH,
@@ -15,7 +16,7 @@ const ballColIdx = FOOTBALL_START_COL - 1
 const ballRowIdx = FOOTBALL_START_ROW - 1
 const defaultTileState = {
   disabled: false,
-  piece: null,
+  piece: NO_PIECE,
   player: null,
 }
 const tiles = []
