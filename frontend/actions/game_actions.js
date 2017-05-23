@@ -1,10 +1,6 @@
-// https://en.wikipedia.org/wiki/Phutball
-
-// Constants
+// CONSTANTS
 
 // Board
-// My version places pieces on squares instead of vertices, and assumes a board 
-// with 19 x 15 squares instead of 19 x 15 vertices.
 export const CLICK_TILE = 'CLICK_TILE'
 export const FOOTBALL_START_COL = 8
 export const FOOTBALL_START_ROW = 10
@@ -22,7 +18,7 @@ export const NO_PIECE = 'NO_PIECE'
 export const PLAYER_ONE = 'PLAYER_ONE'
 export const PLAYER_TWO = 'PLAYER_TWO'
 
-// Action Creators
+// ACTION CREATORS
 
 // Board
 

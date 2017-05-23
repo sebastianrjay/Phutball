@@ -1,4 +1,12 @@
-# Setup
+# Description
+
+[https://en.wikipedia.org/wiki/Phutball](https://en.wikipedia.org/wiki/Phutball)
+
+My version places pieces on squares instead of vertices, and assumes a board 
+with 19 x 15 squares instead of 19 x 15 vertices. Player X scores by placing the
+ball in the top row.
+
+# Local Setup
 
 1. Globally [install](https://github.com/yarnpkg/yarn#installing-yarn) [yarn](https://github.com/yarnpkg/yarn), a deterministic replacement for NPM
 2. Globally [install](https://webpack.js.org/guides/installation/) [Webpack](https://github.com/webpack/webpack)
