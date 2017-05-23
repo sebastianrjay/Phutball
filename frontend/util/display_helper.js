@@ -83,6 +83,7 @@ export const showNextMovesIfExistent = (gameState, nextMoves) => {
 
 export const toggleBallSelection = (gameState, action) => {
   const { colIdx, rowIdx } = action
+
   if (gameState.isBallSelected) {
     if (!gameState.justMovedBall) setTilesDisabled(gameState, false)
     gameState.tiles[rowIdx][colIdx].player = null
