@@ -1,1 +1,1 @@
-.score-chart{font-weight:700;text-align:center}span.player-one{color:red}span.player-two{color:blue}td.disabled{background-color:#a9a9a9}td:hover:not(.disabled){background-color:#d3d3d3;cursor:pointer}td.player-one{background-color:red}td.player-two{background-color:blue}
+.score-chart{font-weight:700;text-align:center}span.player-one{color:red}span.player-two{color:blue}td.disabled{background-color:#a9a9a9}td.player-one:hover:not(.disabled){background-color:red;cursor:pointer}td.player-two:hover:not(.disabled){background-color:blue;cursor:pointer}

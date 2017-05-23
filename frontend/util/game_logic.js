@@ -10,10 +10,12 @@ import {
 } from '../actions/game_actions'
 import {
   allValidMoves,
+  setNextPlayer,
   setTilesDisabled,
   showNextMovesIfExistent,
-  tryJump,
-} from './moves'
+  toggleBallSelection,
+} from './display_helper'
+import { tryJump } from './moves'
 
 const moveFootballAndShowNextMoves = (gameState, action) => {
   const { colIdx, rowIdx } = action
@@ -32,6 +34,7 @@ const moveFootballAndShowNextMoves = (gameState, action) => {
   if (nextMoves.length === 0) {
     gameState.isBallSelected = false
     gameState.justMovedBall = false
+    setNextPlayer(gameState, currentPlayer)
   } else {
     gameState.tiles[rowIdx][colIdx].player = currentPlayer
     gameState.justMovedBall = true
@@ -42,10 +45,8 @@ const moveFootballAndShowNextMoves = (gameState, action) => {
 
 const placeNewMan = (gameState, action) => {
   const { colIdx, rowIdx } = action
-  const newPlayer = gameState.player === PLAYER_ONE ? PLAYER_TWO : PLAYER_ONE
-
-  gameState.player = newPlayer
   gameState.tiles[rowIdx][colIdx].piece = MAN
+  setNextPlayer(gameState)
 
   return gameState
 }
@@ -62,18 +63,6 @@ const scoreGoalIfOnGoalLine = (gameState) => {
   } else if (gameState.ballRowIdx === PLAYER_TWO_GOAL_ROW) {
     gameState.points[PLAYER_TWO] += 1
   }
-}
-
-const toggleBallSelection = (gameState, action) => {
-  const { colIdx, rowIdx } = action
-  if (gameState.isBallSelected) {
-    if (!gameState.justMovedBall) setTilesDisabled(gameState, false)
-    gameState.tiles[rowIdx][colIdx].player = null
-  } else {
-    gameState.tiles[rowIdx][colIdx].player = gameState.player
-  }
-
-  gameState.isBallSelected = !gameState.isBallSelected
 }
 
 const toggleBallSelectionAndShowNextMoves = (gameState, action) => {

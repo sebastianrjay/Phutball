@@ -2,42 +2,6 @@ import max from 'lodash/max'
 import min from 'lodash/min'
 import { MAN, NO_PIECE } from '../actions/game_actions'
 
-export const allValidMoves = (gameState) => {
-  const allMoves = []
-
-  gameState.tiles.forEach((row, rowIdx) => {
-    row.forEach((tile, colIdx) => {
-      if (tryJump(gameState, { colIdx, rowIdx }, false)) {
-        allMoves.push({ colIdx, rowIdx })
-      }
-    })
-  })
-
-  return allMoves
-}
-
-export const setTilesDisabled = (gameState, disabled) => {
-  gameState.tiles.forEach((row, rowIdx) => {
-    row.forEach((tile, colIdx) => {
-      if (!(gameState.ballRowIdx === rowIdx &&
-          gameState.ballColIdx === colIdx)) {
-        gameState.tiles[rowIdx][colIdx].disabled = disabled
-      }
-    })
-  })
-}
-
-export const showNextMovesIfExistent = (gameState, nextMoves) => {
-  if (nextMoves.length > 0) {
-    setTilesDisabled(gameState, true)
-    nextMoves.forEach(({ colIdx, rowIdx }) => {
-      gameState.tiles[rowIdx][colIdx].disabled = false
-    })
-  } else {
-    setTilesDisabled(gameState, false)
-  }
-}
-
 export const tryJump = (gameState, { colIdx, rowIdx }, movePiece = true) => {
   // Return true if possible; false otherwise. Move piece if movePiece is true
   const { ballColIdx, ballRowIdx } = gameState
@@ -53,11 +17,9 @@ export const tryJump = (gameState, { colIdx, rowIdx }, movePiece = true) => {
     return _tryColumnJump(gameState, indices, movePiece)
   } else if (ballColIdx === colIdx) {
     return _tryRowJump(gameState, indices, movePiece)
-  } else {
-    if (colJumpMagnitude === rowJumpMagnitude) {
-      return _tryDiagonalJump(gameState, indices, movePiece)
-    } else return false
-  }
+  } else if (colJumpMagnitude === rowJumpMagnitude) {
+    return _tryDiagonalJump(gameState, indices, movePiece)
+  } else return false
 }
 
 const _tryColumnJump = (gameState, indices, movePiece = true) => {
@@ -92,8 +54,8 @@ const _tryDiagonalJump = (gameState, indices, movePiece = true) => {
       eval(`row ${rowComparator} rowIdx`)) {
 
     if (gameState.tiles[row][col].piece !== MAN) return false
-    eval(`col${colOperator}${colOperator}`)
-    eval(`row${rowOperator}${rowOperator}`)
+    eval(`col${colOperator}${colOperator}`) // Increment / decrement col
+    eval(`row${rowOperator}${rowOperator}`) // Increment / decrement row
   }
 
   if (movePiece) {
@@ -103,8 +65,8 @@ const _tryDiagonalJump = (gameState, indices, movePiece = true) => {
     while (eval(`col ${colComparator} colIdx`) &&
         eval(`row ${rowComparator} rowIdx`)) {
       gameState.tiles[row][col].piece = NO_PIECE
-      eval(`col${colOperator}${colOperator}`)
-      eval(`row${rowOperator}${rowOperator}`)
+      eval(`col${colOperator}${colOperator}`) // Increment / decrement col
+      eval(`row${rowOperator}${rowOperator}`) // Increment / decrement row
     }
   }
 
