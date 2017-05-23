@@ -1,40 +1,30 @@
 import assign from 'lodash/assign'
 import { FOOTBALL, MAN, PLAYER_ONE, PLAYER_TWO } from '../actions/game_actions'
-import { tryColumnJump, tryDiagonalJump, tryRowJump } from './moves'
+import {
+  allValidMoves,
+  showNextMovesIfExistent,
+  tryJump,
+} from './moves'
 
-const makeJumpIfValid = (newGameState, action) => {
+const moveFootballAndShowNextMoves = (newGameState, action) => {
   const { colIdx, rowIdx } = action
   const { ballColIdx, ballRowIdx } = newGameState
-  const checkIndices = { ballColIdx, ballRowIdx, colIdx, rowIdx }
-
-  // Ensure new tile is empty
-  if (newGameState.tiles[rowIdx][colIdx].piece !== null) return false
-
-  if (ballRowIdx === rowIdx && ballColIdx === colIdx) {
-    return false
-  } else if (ballRowIdx === rowIdx) {
-    return tryColumnJump(newGameState, checkIndices)
-  } else if (ballColIdx === colIdx) {
-    return tryRowJump(newGameState, checkIndices)
-  } else {
-    const colJumpMagnitude = Math.abs(colIdx - ballColIdx)
-    const rowJumpMagnitude = Math.abs(rowIdx - ballRowIdx)
-    if (colJumpMagnitude === rowJumpMagnitude) {
-      return tryDiagonalJump(newGameState, checkIndices)
-    } else return false
-  }
-}
-
-const moveFootball = (newGameState, action) => {
-  const { colIdx, rowIdx } = action
-  const { ballColIdx, ballRowIdx } = newGameState
+  const currentPlayer = newGameState.tiles[ballRowIdx][ballColIdx].player
 
   newGameState.tiles[ballRowIdx][ballColIdx].piece = null
   newGameState.tiles[ballRowIdx][ballColIdx].player = null
   newGameState.tiles[rowIdx][colIdx].piece = FOOTBALL
   newGameState.ballColIdx = colIdx
   newGameState.ballRowIdx = rowIdx
-  newGameState.isBallSelected = false
+
+  const nextMoves = allValidMoves(newGameState)
+  showNextMovesIfExistent(newGameState, nextMoves)
+
+  if (nextMoves.length === 0) {
+    newGameState.isBallSelected = false
+  } else {
+    newGameState.tiles[rowIdx][colIdx].player = currentPlayer
+  }
 
   return newGameState
 }
@@ -57,6 +47,12 @@ const toggleBallSelection = (newGameState, action) => {
   } else {
     newGameState.tiles[rowIdx][colIdx].player = newGameState.player
   }
+}
+
+const toggleBallSelectionAndShowNextMoves = (newGameState, action) => {
+  const nextMoves = allValidMoves(newGameState)
+  showNextMovesIfExistent(newGameState, nextMoves)
+  toggleBallSelection(newGameState, action)
 
   return newGameState
 }
@@ -66,7 +62,7 @@ export const handleTileClick = (state, action) => {
 
   switch (action.piece) {
     case FOOTBALL:
-      return toggleBallSelection(newGameState, action)
+      return toggleBallSelectionAndShowNextMoves(newGameState, action)
     case MAN:
       // Man deletion not yet built
       return state
@@ -74,8 +70,8 @@ export const handleTileClick = (state, action) => {
       if (!state.isBallSelected) {
         return placeNewMan(newGameState, action)
       } else {
-        if (makeJumpIfValid(newGameState, action)) {
-          return moveFootball(newGameState, action)
+        if (tryJump(newGameState, action)) {
+          return moveFootballAndShowNextMoves(newGameState, action)
         } else return state
       }
     default:

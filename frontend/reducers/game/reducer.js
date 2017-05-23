@@ -5,9 +5,7 @@ import {
   FOOTBALL_START_COL,
   FOOTBALL_START_ROW,
   HEIGHT,
-  MAN,
   PLAYER_ONE,
-  PLAYER_TWO,
   WIDTH,
 } from '../../actions/game_actions'
 import { handleTileClick } from '../../util/game_logic'
