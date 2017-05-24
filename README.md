@@ -6,6 +6,8 @@ My version places pieces on squares instead of vertices, and assumes a board
 with 19 x 15 squares instead of 19 x 15 vertices. Player X scores by placing the
 ball in the top row.
 
+Play it live [HERE](http://phutball.surge.sh)
+
 # Local Setup
 
 1. Globally [install](https://github.com/yarnpkg/yarn#installing-yarn) [yarn](https://github.com/yarnpkg/yarn), a deterministic replacement for NPM

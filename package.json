@@ -1,9 +1,9 @@
 {
   "name": "Phutball",
   "version": "1.0.0",
-  "description": "",
+  "description": "2P browser game inspired by Go, built with ES6 JavaScript, LESS, React-Redux and Webpack",
   "main": "index.js",
-  "repository": "",
+  "repository": "https://github.com/sebastianrjay/Phutball",
   "author": "Sebastian Jay (sebastianrjay)",
   "license": "MIT",
   "scripts": {
