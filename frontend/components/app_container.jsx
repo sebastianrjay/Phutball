@@ -14,6 +14,11 @@ const AppContainer = (props) => (
       </div>
       <div className="col-md-2"></div>
     </section>
+    <footer>
+      <a href="https://www.github.com/sebastianrjay/Phutball">
+        View source code on Github.
+      </a>
+    </footer>
   </div>
 )
 
